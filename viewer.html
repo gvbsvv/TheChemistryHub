@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+</head>
+<body>
+    <div class="header">Markdown Viewer</div>
+    <div class="container">
+        <div id="content">Loading...</div>
+    </div>
+
+    <script>
+        async function loadMarkdown() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const file = urlParams.get('file');
+
+            if (!file) {
+                document.getElementById("content").innerText = "No file specified.";
+                return;
+            }
+
+            try {
+                const response = await fetch(file);
+                if (!response.ok) throw new Error("File not found");
+                const text = await response.text();
+                
+                // Convert markdown to HTML
+                const converter = new showdown.Converter();
+                document.getElementById("content").innerHTML = converter.makeHtml(text);
+            } catch (error) {
+                document.getElementById("content").innerText = "Error loading file.";
+            }
+        }
+
+        loadMarkdown();
+    </script>
+</body>
+</html>

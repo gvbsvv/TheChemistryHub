@@ -18,30 +18,35 @@
         <div id="content">Loading...</div>
     </div>
 
-    <script>
-        async function loadMarkdown() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const file = urlParams.get('file');
+    async function loadMarkdown() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let file = urlParams.get('file');
 
-            if (!file) {
-                document.getElementById("content").innerText = "No file specified.";
-                return;
-            }
+    if (!file) {
+        document.getElementById("content").innerText = "No file specified.";
+        return;
+    }
 
-            try {
-                const response = await fetch(file);
-                if (!response.ok) throw new Error("File not found");
-                const text = await response.text();
-                
-                // Convert markdown to HTML
-                const converter = new showdown.Converter();
-                document.getElementById("content").innerHTML = converter.makeHtml(text);
-            } catch (error) {
-                document.getElementById("content").innerText = "Error loading file.";
-            }
-        }
+    // Ensure GitHub Pages serves the file correctly
+    if (!file.startsWith("/")) {
+        file = "/" + file;
+    }
 
-        loadMarkdown();
+    try {
+        const response = await fetch(file);
+        if (!response.ok) throw new Error("File not found");
+        const text = await response.text();
+
+        // Convert markdown to HTML
+        const converter = new showdown.Converter();
+        document.getElementById("content").innerHTML = converter.makeHtml(text);
+    } catch (error) {
+        document.getElementById("content").innerText = "Error loading file.";
+    }
+}
+
+loadMarkdown();
+
     </script>
 
     <style>

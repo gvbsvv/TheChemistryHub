@@ -10,6 +10,7 @@
 <body>
     <div class="header">Markdown Viewer</div>
     <div class="container">
+        <a href="index.html" class="back-button">← Back to Index</a>
         <div id="content">Loading...</div>
     </div>
 
@@ -38,5 +39,20 @@
 
         loadMarkdown();
     </script>
+
+    <style>
+        .back-button {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </body>
 </html>

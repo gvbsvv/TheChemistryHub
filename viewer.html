@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 </head>
 <body>
-    <div class="header">Markdown Viewer</div>
+    <div class="header" id="page-title">Markdown Viewer</div>
     <div class="container">
         <a href="index.html" class="back-button">← Back to Index</a>
         <div id="toc"></div> <!-- Table of Contents Section -->
@@ -51,6 +51,9 @@
                     hljs.highlightElement(block);
                 });
 
+                // Update page title dynamically based on file name
+                document.getElementById("page-title").innerText = getFormattedTitle(file);
+
             } catch (error) {
                 console.error("Error loading markdown:", error);
                 document.getElementById("content").innerText = "Error loading file.";
@@ -80,65 +83,13 @@
             return tempDiv.innerHTML;
         }
 
+        // Format file name to display as page title
+        function getFormattedTitle(filename) {
+            return filename.replace(/-/g, " ").replace(".md", "").replace(/\b\w/g, char => char.toUpperCase());
+        }
+
         // Load markdown on page load
         document.addEventListener("DOMContentLoaded", loadMarkdown);
     </script>
-
-    <style>
-        .back-button {
-            display: inline-block;
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .back-button:hover {
-            background-color: #0056b3;
-        }
-
-        .toc {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .toc h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .toc ul {
-            list-style: none;
-            padding-left: 10px;
-        }
-
-        .toc li {
-            margin: 5px 0;
-        }
-
-        .toc-indent {
-            margin-left: 15px;
-            font-size: 14px;
-        }
-
-        /* Markdown Content Styling */
-        #content {
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            line-height: 1.6;
-            font-size: 16px;
-        }
-
-        #content h1, #content h2 {
-            color: #333;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 5px;
-        }
-    </style>
 </body>
 </html>

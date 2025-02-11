@@ -12,6 +12,7 @@ body {
     margin-bottom: 20px;
 }
 
+/* Ensures AP Chemistry and General Chemistry are side by side */
 .content-container {
     display: flex;
     justify-content: space-between;

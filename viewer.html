@@ -27,13 +27,12 @@
         return;
     }
 
-    // Ensure GitHub Pages serves the file correctly
-    if (!file.startsWith("/")) {
-        file = "/" + file;
-    }
+    // Ensure correct path handling for GitHub Pages
+    const basePath = "https://gvbsvv.github.io/TheChemistryHub/";
+    const filePath = basePath + file;
 
     try {
-        const response = await fetch(file);
+        const response = await fetch(filePath);
         if (!response.ok) throw new Error("File not found");
         const text = await response.text();
 
@@ -46,6 +45,7 @@
 }
 
 loadMarkdown();
+
 
     </script>
 

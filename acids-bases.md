@@ -30,4 +30,4 @@ Acid-Base chemistry is a fundamental topic in chemistry that deals with the inte
 
 ---
 🧪 _Acid-base chemistry is crucial in biological and industrial processes!_
-[🔗 Learn more about Acid-Base Chemistry](acid-base-learn-more.md)
+[🔗 Learn more about Acid-Base Chemistry](acid-base-learn-more.mdx)

@@ -5,129 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Chemistry Hub</title>
     <link rel="stylesheet" href="styles.css">
-</head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>  </head>
 <body>
     <div class="header">The Chemistry Hub</div>
 
     <div class="content-container">
 
-       <div class="intro-section">
-    <h2>Introduction to Chemistry: Unlocking the Secrets of the Universe</h2>
-    <div id="intro-content">
-        <p>
-            Chemistry is more than just bubbling beakers and complex equations; it's the science that explores the very fabric of our world. From the smallest atom to the largest star, chemistry helps us understand the composition, structure, properties, and reactions of matter. It's the key to unlocking the secrets of the universe and shaping the world around us.
-        </p>
-        <p>
-            Why is chemistry so important? Because it's deeply intertwined with our daily lives. Consider these examples:
-        </p>
-        <ul>
-            <li>
-                <strong>The food we eat:</strong> Chemistry explains the nutrients in our food, how our bodies digest them, and even how cooking transforms ingredients. Understanding chemical reactions helps us make healthier choices and appreciate the art of culinary science.
-            </li>
-            <li>
-                <strong>The medicines we take:</strong>  From aspirin to life-saving antibiotics, chemistry is at the heart of drug development. It allows us to target specific ailments and understand how medicines interact with our bodies.
-            </li>
-            <li>
-                <strong>The materials we use:</strong>  Chemistry is essential in the creation of plastics, fabrics, electronics, and countless other materials that make our lives easier. It allows us to design materials with specific properties, from lightweight yet durable phone screens to biodegradable packaging.
-            </li>
-            <li>
-                <strong>The energy that powers our lives:</strong> Chemistry explains the processes behind generating electricity, from burning fossil fuels to harnessing solar energy.  It's also crucial in developing new, cleaner energy sources, like advanced batteries and fuel cells.
-            </li>
-            <li>
-                <strong>The environment around us:</strong> Chemistry helps us understand complex environmental issues like pollution, climate change, and ozone depletion. It gives us the tools to monitor these problems and develop solutions for a sustainable future.
-            </li>
-        </ul>
-        <p>
-            Chemistry isn't just about memorizing facts; it's about developing critical thinking skills, problem-solving abilities, and a deeper understanding of the world. By studying chemistry, you'll learn to analyze data, design experiments, and draw logical conclusions – skills that are valuable in any field.
-        </p>
-        <p>
-            Whether you dream of becoming a doctor, engineer, environmental scientist, or simply a more informed citizen, a solid foundation in chemistry is invaluable.  It empowers you to ask questions, seek answers, and make a positive impact on the world. So, dive in, explore, and discover the fascinating world of chemistry!
-        </p>
-    </div>
-</div>
+        <div class="intro-section">
+            <h2>Introduction to Chemistry</h2>
+            <div id="intro-content">Loading...</div>
+        </div>
 
         <div class="chemistry-section">
             <h2>📘 AP Chemistry</h2>
-            <ul class="chemistry-links">
-                <li><a href="viewer.html?file=atomic-structure.md">Atomic Structure and Properties</a></li>
-                <li><a href="viewer.html?file=compound-structure.md">Compound Structure and Properties</a></li>
-                <li><a href="viewer.html?file=substance-properties.md">Properties of Substances and Mixtures</a></li>
-                <li><a href="viewer.html?file=chemical-reactions.md">Chemical Reactions</a></li>
-                <li><a href="viewer.html?file=kinetics.md">Kinetics</a></li>
-                <li><a href="viewer.html?file=thermochemistry.md">Thermochemistry</a></li>
-                <li><a href="viewer.html?file=equilibrium.md">Equilibrium</a></li>
-                <li><a href="viewer.html?file=acids-bases.md">Acids and Bases</a></li>
-                <li><a href="viewer.html?file=thermodynamics-electrochemistry.md">Thermodynamics and Electrochemistry</a></li>
-            </ul>
+            <ul class="chemistry-links" id="ap-chemistry-links">
+                </ul>
         </div>
 
         <div class="chemistry-section">
             <h2>📗 General Chemistry</h2>
-            <ul class="chemistry-links">
-                <li><a href="viewer.html?file=chemical-bonding.md">Chemical Bonding</a></li>
-                <li><a href="viewer.html?file=stoichiometry.md">Stoichiometry</a></li>
-                <li><a href="viewer.html?file=states-of-matter.md">State of Matter</a></li>
-                <li><a href="viewer.html?file=solutions.md">Solutions</a></li>
-                <li><a href="viewer.html?file=gas-laws.md">Gas Laws</a></li>
-                <li><a href="viewer.html?file=redox-reactions.md">Redox Reactions</a></li>
-            </ul>
+            <ul class="chemistry-links" id="general-chemistry-links">
+                </ul>
         </div>
     </div>
 
     <script>
-        // ... (Your existing JavaScript code: loadMarkdown, getFormattedTitle, generateTableOfContents) ...
-
-        // Load the intro content (Introduction to Chemistry)
-        window.addEventListener('DOMContentLoaded', () => {
-            loadMarkdown('introduction-to-chemistry.md', 'intro-content');  // Call loadMarkdown for intro
-            loadMarkdown(); // Call loadMarkdown for other sections (if needed)
-        });
-
-        async function loadMarkdown(file = null, targetElementId = 'content') { // Modified function
-            if (file === null) {
-              const urlParams = new URLSearchParams(window.location.search);
-              file = urlParams.get('file');
-              if (!file) {
-                document.getElementById("content").innerText = "No file specified.";
-                return;
-              }
-            }
-            console.log("Fetching file:", file);
-
+        async function loadMarkdown(file, targetElementId) {
             try {
                 const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
-                console.log("Fetching from:", rawURL);
                 const response = await fetch(rawURL);
                 if (!response.ok) {
-                    console.error("Raw URL:", rawURL);
-                    console.error("Response status:", response.status);
-                    const errorText = await response.text();
-                    console.error("Response text:", errorText);
-                    throw new Error(`File not found (Status: ${response.status})`);
+                    throw new Error(`Error loading ${file}: ${response.status}`);
                 }
-
                 const text = await response.text();
                 const converter = new showdown.Converter();
-                let htmlContent = converter.makeHtml(text);
+                const htmlContent = converter.makeHtml(text);
 
-                htmlContent = generateTableOfContents(htmlContent);
-
-                document.getElementById(targetElementId).innerHTML = htmlContent; // Use targetElementId
-
-                document.querySelectorAll("pre code").forEach(hljs.highlightElement);
-
-                if (targetElementId === 'content') { // Only set title for main content
-                    document.title = getFormattedTitle(file);
-                }
+                document.getElementById(targetElementId).innerHTML = htmlContent;
 
             } catch (error) {
-                console.error("Error loading markdown:", error);
-                document.getElementById(targetElementId).innerText = "Error loading file. Make sure the file exists and the URL is correct.";
+                console.error(error);
+                document.getElementById(targetElementId).innerText = `Error loading ${file}. Please check the file path and ensure it exists in the repository.`;
             }
         }
 
+        function addLinks(links, targetElementId) {
+            const ul = document.getElementById(targetElementId);
+            links.forEach(link => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `viewer.html?file=${link.file}`;
+                a.textContent = link.text;
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+        }
 
-        // ... (rest of your JavaScript functions)
+        window.addEventListener('DOMContentLoaded', () => {
+            loadMarkdown('introduction-to-chemistry.md', 'intro-content');
+
+            const apChemistryLinks = [
+                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
+                { file: 'compound-structure.md', text: 'Compound Structure and Properties' },
+                { file: 'substance-properties.md', text: 'Properties of Substances and Mixtures' },
+                { file: 'chemical-reactions.md', text: 'Chemical Reactions' },
+                { file: 'kinetics.md', text: 'Kinetics' },
+                { file: 'thermochemistry.md', text: 'Thermochemistry' },
+                { file: 'equilibrium.md', text: 'Equilibrium' },
+                { file: 'acids-bases.md', text: 'Acids and Bases' },
+                { file: 'thermodynamics-electrochemistry.md', text: 'Thermodynamics and Electrochemistry' }
+            ];
+
+            const generalChemistryLinks = [
+                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
+                { file: 'stoichiometry.md', text: 'Stoichiometry' },
+                { file: 'states-of-matter.md', text: 'State of Matter' },
+                { file: 'solutions.md', text: 'Solutions' },
+                { file: 'gas-laws.md', text: 'Gas Laws' },
+                { file: 'redox-reactions.md', text: 'Redox Reactions' }
+            ];
+
+            addLinks(apChemistryLinks, 'ap-chemistry-links');
+            addLinks(generalChemistryLinks, 'general-chemistry-links');
+
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const mdFile = urlParams.get('file');
+            if (mdFile) {
+                loadMarkdown(mdFile, 'content');
+            }
+        });
     </script>
 </body>
 </html>

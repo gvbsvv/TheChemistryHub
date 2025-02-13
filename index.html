@@ -11,9 +11,9 @@
         body {
             font-family: sans-serif;
             margin: 20px;
-            display: flex; /* Use flexbox for overall layout */
-            flex-direction: column; /* Stack header and content */
-            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .header {
             font-size: 2em;
@@ -21,20 +21,21 @@
             margin-bottom: 20px;
         }
         .content-container {
-            display: flex; /* Use flexbox for main content layout */
-            flex-grow: 1; /* Allow content to expand to fill available space */
+            display: flex;
+            flex-grow: 1; /* Key: Allow content to take up available space */
+            align-items: flex-start; /* Key: Align items to the top */
         }
         .intro-section {
-            width: 30%; /* Adjust width as needed */
-            padding-right: 20px; /* Add some spacing */
+            width: 50%; /* Adjust as needed */
+            padding-right: 20px;
         }
         .chemistry-sections {
-            width: 70%; /* Adjust width as needed */
+            width: 50%; /* Adjust as needed */
             display: flex;
-            flex-direction: column; /* Stack chemistry sections */
+            flex-direction: column;
         }
         .chemistry-section {
-            margin-bottom: 20px; /* Space between sections */
+            margin-bottom: 20px;
         }
         h2 {
             margin-bottom: 10px;
@@ -49,7 +50,7 @@
         .chemistry-links a {
             display: block;
             padding: 10px;
-            background-color: #007bff; /* Example color */
+            background-color: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -96,8 +97,8 @@
 
             // ... (apChemistryLinks and generalChemistryLinks data remain the same) ...
 
-            addLinks(generalChemistryLinks, 'general-chemistry-links'); // Add General Chemistry links FIRST
-            addLinks(apChemistryLinks, 'ap-chemistry-links'); // Then add AP Chemistry links
+            addLinks(generalChemistryLinks, 'general-chemistry-links');
+            addLinks(apChemistryLinks, 'ap-chemistry-links');
 
             // ... (rest of DOMContentLoaded logic remains the same) ...
         });

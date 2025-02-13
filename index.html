@@ -4,69 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Chemistry Hub</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     <style>
-        /* ... (Your CSS styles remain the same) ... */
+        body {
+            font-family: sans-serif;
+            display: flex; /* Two-column layout */
+        }
+        .column {
+            width: 50%; /* Each column takes 50% width */
+            padding: 20px; /* Add some padding */
+        }
+        ul {
+            list-style: none; /* Remove bullet points */
+            padding: 0;
+        }
+        li {
+            margin-bottom: 5px; /* Space between links */
+        }
     </style>
 </head>
 <body>
-    <div class="header">The Chemistry Hub</div>
 
-    <div class="content-container">
-        <div class="chemistry-sections">
-            <div class="chemistry-section">
-                <h2>📗 General Chemistry</h2>
-                <ul class="chemistry-links" id="general-chemistry-links">
-                </ul>
-            </div>
+    <div class="column">
+        <h2>📗 General Chemistry</h2>
+        <ul id="general-chemistry-links"></ul>
 
-            <div class="chemistry-section">
-                <h2>📘 AP Chemistry</h2>
-                <ul class="chemistry-links" id="ap-chemistry-links">
-                </ul>
-            </div>
-        </div>
-        <div class="intro-section">
-            <h2>Introduction to Chemistry</h2>
-            <div id="intro-content">Loading...</div>
-        </div>
+        <h2>📘 AP Chemistry</h2>
+        <ul id="ap-chemistry-links"></ul>
+    </div>
+
+    <div class="column">
+        <h2>Introduction to Chemistry</h2>
+        <div id="intro-content">Loading...</div>
     </div>
 
     <script>
         async function loadMarkdown(file, targetElementId) {
-            // ... (loadMarkdown function remains the same) ...
+            try {
+                const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
+                const response = await fetch(rawURL);
+                if (!response.ok) {
+                    throw new Error(`Error loading ${file}: ${response.status}`);
+                }
+                const text = await response.text();
+                const converter = new showdown.Converter();
+                const htmlContent = converter.makeHtml(text);
+                document.getElementById(targetElementId).innerHTML = htmlContent;
+            } catch (error) {
+                console.error(error);
+                document.getElementById(targetElementId).innerText = `Error loading ${file}.`;
+            }
         }
 
         function addLinks(links, targetElementId) {
-          const ul = document.getElementById(targetElementId);
-          if (ul) { // Check if the element exists before trying to add links
+            const ul = document.getElementById(targetElementId);
             links.forEach(link => {
-              const li = document.createElement('li');
-              const a = document.createElement('a');
-              a.href = `viewer.html?file=${link.file}`;
-              a.textContent = link.text;
-              li.appendChild(a);
-              ul.appendChild(li);
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `viewer.html?file=${link.file}`;
+                a.textContent = link.text;
+                li.appendChild(a);
+                ul.appendChild(li);
             });
-          } else {
-            console.error("Target element not found:", targetElementId);
-          }
         }
-
 
         window.addEventListener('DOMContentLoaded', () => {
             loadMarkdown('introduction-to-chemistry.md', 'intro-content');
 
-            const apChemistryLinks = [ /* ... Your AP Chemistry Links ... */ ];
-            const generalChemistryLinks = [ /* ... Your General Chemistry Links ... */ ];
+            const apChemistryLinks = [
+                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
+                { file: 'compound-structure.md', text: 'Compound Structure and Properties' },
+                { file: 'substance-properties.md', text: 'Properties of Substances and Mixtures' },
+                { file: 'chemical-reactions.md', text: 'Chemical Reactions' },
+                { file: 'kinetics.md', text: 'Kinetics' },
+                { file: 'thermochemistry.md', text: 'Thermochemistry' },
+                { file: 'equilibrium.md', text: 'Equilibrium' },
+                { file: 'acids-bases.md', text: 'Acids and Bases' },
+                { file: 'thermodynamics-electrochemistry.md', text: 'Thermodynamics and Electrochemistry' }
+            ];
 
-            // Call addLinks AFTER the DOM is fully loaded.
-            setTimeout(() => { // Use setTimeout to ensure the DOM is ready
-              addLinks(generalChemistryLinks, 'general-chemistry-links');
-              addLinks(apChemistryLinks, 'ap-chemistry-links');
-            }, 0); // A timeout of 0ms is often enough to ensure the DOM is ready.
+            const generalChemistryLinks = [
+                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
+                { file: 'stoichiometry.md', text: 'Stoichiometry' },
+                { file: 'states-of-matter.md', text: 'State of Matter' },
+                { file: 'solutions.md', text: 'Solutions' },
+                { file: 'gas-laws.md', text: 'Gas Laws' },
+                { file: 'redox-reactions.md', text: 'Redox Reactions' }
+            ];
 
+            // Use setTimeout to ensure the DOM is ready:
+            setTimeout(() => {
+                addLinks(generalChemistryLinks, 'general-chemistry-links');
+                addLinks(apChemistryLinks, 'ap-chemistry-links');
+            }, 0);
         });
     </script>
 </body>

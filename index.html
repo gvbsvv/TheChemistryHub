@@ -27,30 +27,49 @@
 
     <div class="column">
         <h2>📗 General Chemistry</h2>
-        <ul id="general-chemistry-links"> </ul> 
+        <ul id="general-chemistry-links"></ul>
 
         <h2>📘 AP Chemistry</h2>
-        <ul id="ap-chemistry-links"> </ul> 
+        <ul id="ap-chemistry-links"></ul>
     </div>
 
     <div class="column">
-      
+        <h2>Introduction to Chemistry</h2>
         <div id="intro-content">Loading...</div>
     </div>
 
     <script>
-        // ... (loadMarkdown function remains the same)
+        async function loadMarkdown(file, targetElementId) {
+            try {
+                const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
+                const response = await fetch(rawURL);
+                if (!response.ok) {
+                    throw new Error(`Error loading ${file}: ${response.status}`);
+                }
+                const text = await response.text();
+                const converter = new showdown.Converter();
+                const htmlContent = converter.makeHtml(text);
+                document.getElementById(targetElementId).innerHTML = htmlContent;
+            } catch (error) {
+                console.error(error);
+                document.getElementById(targetElementId).innerText = `Error loading ${file}.`;
+            }
+        }
 
         function addLinks(links, targetElementId) {
             const ul = document.getElementById(targetElementId);
-            links.forEach(link => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = `viewer.html?file=${link.file}`;
-                a.textContent = link.text;
-                li.appendChild(a);
-                ul.appendChild(li);
-            });
+            if (ul) { // Check if the element exists before trying to add links
+                links.forEach(link => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = `viewer.html?file=${link.file}`;
+                    a.textContent = link.text;
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                });
+            } else {
+              console.error("Target element not found:", targetElementId);
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {

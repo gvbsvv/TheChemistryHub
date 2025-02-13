@@ -10,18 +10,17 @@ async function loadMarkdown() {
     console.log("Fetching file:", file);
 
     try {
-        // Ensure the file does not include "content/" in the query param
-        if (file.startsWith("content/")) {
-            file = file.replace("content/", ""); // Remove "content/" if user includes it in the URL
-        }
+        // No need to check for "content/" anymore since files are in the root
 
-        // GitHub Pages requires a full raw URL
-        const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/content/${file}`;
+        // GitHub Pages requires a full raw URL.  Updated URL to reflect root location
+        const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`; // Removed "content/"
 
         console.log("Fetching from:", rawURL);
 
         const response = await fetch(rawURL);
-        if (!response.ok) throw new Error(`File not found (Status: ${response.status})`);
+        if (!response.ok) {
+            throw new Error(`File not found (Status: ${response.status})`);
+        }
         const text = await response.text();
 
         // Convert markdown to HTML
@@ -44,6 +43,27 @@ async function loadMarkdown() {
 
     } catch (error) {
         console.error("Error loading markdown:", error);
-        document.getElementById("content").innerText = "Error loading file. Make sure the file exists.";
+        document.getElementById("content").innerText = "Error loading file. Make sure the file exists and the URL is correct."; // Improved error message
     }
+}
+
+
+function getFormattedTitle(file) {
+    // Extract the filename without the extension and replace hyphens/underscores with spaces
+    let filename = file.substring(0, file.lastIndexOf('.')); // Remove extension
+    filename = filename.replace(/[-_]/g, ' '); // Replace hyphens/underscores with spaces
+    return filename;
+}
+
+
+// Placeholder for generateTableOfContents - you'll need to implement this
+function generateTableOfContents(htmlContent) {
+    // Your implementation for generating a table of contents from the HTML
+    // This is a complex task and requires parsing the HTML structure.
+    // There are libraries and algorithms available for this.
+    // For a basic example, you can search for "javascript generate table of contents from html".
+    // Or consider using a library like "marked" which has TOC generation built-in.
+
+    // Example placeholder (replace with your actual implementation):
+    return htmlContent; // Return the original content for now
 }

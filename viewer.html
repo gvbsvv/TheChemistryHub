@@ -10,8 +10,15 @@ async function loadMarkdown() {
     console.log("Fetching file:", file);
 
     try {
-        // GitHub Pages requires raw file URL
+        // Ensure the file does not include "content/" in the query param
+        if (file.startsWith("content/")) {
+            file = file.replace("content/", ""); // Remove "content/" if user includes it in the URL
+        }
+
+        // GitHub Pages requires a full raw URL
         const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/content/${file}`;
+
+        console.log("Fetching from:", rawURL);
 
         const response = await fetch(rawURL);
         if (!response.ok) throw new Error(`File not found (Status: ${response.status})`);

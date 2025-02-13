@@ -10,6 +10,10 @@
     <div class="header">The Chemistry Hub</div>
 
     <div class="content-container">
+
+        <div class="intro-section">  <h2>Introduction to Chemistry</h2>
+            <div id="intro-content">Loading...</div>  </div>
+
         <div class="chemistry-section">
             <h2>📘 AP Chemistry</h2>
             <ul class="chemistry-links">
@@ -28,7 +32,6 @@
         <div class="chemistry-section">
             <h2>📗 General Chemistry</h2>
             <ul class="chemistry-links">
-                <li><a href="viewer.html?file=introduction-to-chemistry.md">Introduction to Chemistry</a></li>
                 <li><a href="viewer.html?file=chemical-bonding.md">Chemical Bonding</a></li>
                 <li><a href="viewer.html?file=stoichiometry.md">Stoichiometry</a></li>
                 <li><a href="viewer.html?file=states-of-matter.md">State of Matter</a></li>
@@ -39,5 +42,60 @@
         </div>
     </div>
 
+    <script>
+        // ... (Your existing JavaScript code: loadMarkdown, getFormattedTitle, generateTableOfContents) ...
+
+        // Load the intro content (Introduction to Chemistry)
+        window.addEventListener('DOMContentLoaded', () => {
+            loadMarkdown('introduction-to-chemistry.md', 'intro-content');  // Call loadMarkdown for intro
+            loadMarkdown(); // Call loadMarkdown for other sections (if needed)
+        });
+
+        async function loadMarkdown(file = null, targetElementId = 'content') { // Modified function
+            if (file === null) {
+              const urlParams = new URLSearchParams(window.location.search);
+              file = urlParams.get('file');
+              if (!file) {
+                document.getElementById("content").innerText = "No file specified.";
+                return;
+              }
+            }
+            console.log("Fetching file:", file);
+
+            try {
+                const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
+                console.log("Fetching from:", rawURL);
+                const response = await fetch(rawURL);
+                if (!response.ok) {
+                    console.error("Raw URL:", rawURL);
+                    console.error("Response status:", response.status);
+                    const errorText = await response.text();
+                    console.error("Response text:", errorText);
+                    throw new Error(`File not found (Status: ${response.status})`);
+                }
+
+                const text = await response.text();
+                const converter = new showdown.Converter();
+                let htmlContent = converter.makeHtml(text);
+
+                htmlContent = generateTableOfContents(htmlContent);
+
+                document.getElementById(targetElementId).innerHTML = htmlContent; // Use targetElementId
+
+                document.querySelectorAll("pre code").forEach(hljs.highlightElement);
+
+                if (targetElementId === 'content') { // Only set title for main content
+                    document.title = getFormattedTitle(file);
+                }
+
+            } catch (error) {
+                console.error("Error loading markdown:", error);
+                document.getElementById(targetElementId).innerText = "Error loading file. Make sure the file exists and the URL is correct.";
+            }
+        }
+
+
+        // ... (rest of your JavaScript functions)
+    </script>
 </body>
 </html>

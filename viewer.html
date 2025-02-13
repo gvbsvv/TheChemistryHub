@@ -1,69 +1,80 @@
-async function loadMarkdown() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let file = urlParams.get('file');
-
-    if (!file) {
-        document.getElementById("content").innerText = "No file specified.";
-        return;
-    }
-
-    console.log("Fetching file:", file);
-
-    try {
-        // No need to check for "content/" anymore since files are in the root
-
-        // GitHub Pages requires a full raw URL.  Updated URL to reflect root location
-        const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`; // Removed "content/"
-
-        console.log("Fetching from:", rawURL);
-
-        const response = await fetch(rawURL);
-        if (!response.ok) {
-            throw new Error(`File not found (Status: ${response.status})`);
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <style>
+        /* Basic styling - you can customize this */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
         }
-        const text = await response.text();
+        #content {
+            /* Add any specific content styling here */
+        }
+    </style>
+</head>
+<body>
+    <div id="content"></div>  </body>
+    <script>
+        async function loadMarkdown() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let file = urlParams.get('file');
 
-        // Convert markdown to HTML
-        const converter = new showdown.Converter();
-        let htmlContent = converter.makeHtml(text);
+            if (!file) {
+                document.getElementById("content").innerText = "No file specified.";
+                return;
+            }
 
-        // Generate Table of Contents
-        htmlContent = generateTableOfContents(htmlContent);
+            console.log("Fetching file:", file);
 
-        // Set converted content
-        document.getElementById("content").innerHTML = htmlContent;
+            try {
+                const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
 
-        // Apply syntax highlighting
-        document.querySelectorAll("pre code").forEach((block) => {
-            hljs.highlightElement(block);
-        });
+                console.log("Fetching from:", rawURL);
 
-        // Update page title dynamically based on file name
-        document.getElementById("page-title").innerText = getFormattedTitle(file);
+                const response = await fetch(rawURL);
+                if (!response.ok) {
+                    console.error("Raw URL:", rawURL);
+                    console.error("Response status:", response.status);
+                    const errorText = await response.text();
+                    console.error("Response text:", errorText);
+                    throw new Error(`File not found (Status: ${response.status})`);
+                }
 
-    } catch (error) {
-        console.error("Error loading markdown:", error);
-        document.getElementById("content").innerText = "Error loading file. Make sure the file exists and the URL is correct."; // Improved error message
-    }
-}
+                const text = await response.text();
+                const converter = new showdown.Converter();
+                let htmlContent = converter.makeHtml(text);
 
+                htmlContent = generateTableOfContents(htmlContent);
 
-function getFormattedTitle(file) {
-    // Extract the filename without the extension and replace hyphens/underscores with spaces
-    let filename = file.substring(0, file.lastIndexOf('.')); // Remove extension
-    filename = filename.replace(/[-_]/g, ' '); // Replace hyphens/underscores with spaces
-    return filename;
-}
+                document.getElementById("content").innerHTML = htmlContent;
 
+                document.querySelectorAll("pre code").forEach(hljs.highlightElement);
 
-// Placeholder for generateTableOfContents - you'll need to implement this
-function generateTableOfContents(htmlContent) {
-    // Your implementation for generating a table of contents from the HTML
-    // This is a complex task and requires parsing the HTML structure.
-    // There are libraries and algorithms available for this.
-    // For a basic example, you can search for "javascript generate table of contents from html".
-    // Or consider using a library like "marked" which has TOC generation built-in.
+                document.title = getFormattedTitle(file); // Set page title
 
-    // Example placeholder (replace with your actual implementation):
-    return htmlContent; // Return the original content for now
-}
+            } catch (error) {
+                console.error("Error loading markdown:", error);
+                document.getElementById("content").innerText = "Error loading file. Make sure the file exists and the URL is correct.";
+            }
+        }
+
+        function getFormattedTitle(file) {
+            let filename = file.substring(0, file.lastIndexOf('.'));
+            filename = filename.replace(/[-_]/g, ' ');
+            return filename;
+        }
+
+        function generateTableOfContents(htmlContent) {
+            // Placeholder - you MUST implement this!
+            //  Use a library or write your own logic to parse the HTML and create a TOC.
+            return htmlContent; // Return original content for now
+        }
+
+        window.addEventListener('DOMContentLoaded', loadMarkdown); // Call on load
+    </script>
+</body>
+</html>

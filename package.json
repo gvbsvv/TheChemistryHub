@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/gvbsvv/TheChemistryHub/issues"
   },
-  "homepage": "https://github.com/gvbsvv/TheChemistryHub#readme",
+ "homepage": "https://gvbsvv.github.io/TheChemistryHub/pages",
   "description": "",
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",

@@ -31,6 +31,15 @@
 
         <h2>📘 AP Chemistry</h2>
         <ul id="ap-chemistry-links"></ul>
+
+        <h2>📙 Academic Chemistry</h2>
+        <ul id="academic-chemistry-links"></ul>
+
+        <h2>📕 Advanced Chemistry</h2>
+        <ul id="advanced-chemistry-links"></ul>
+
+        <h2>📔 Advanced Honors Concentrate Chemistry</h2>
+        <ul id="honors-chemistry-links"></ul>
     </div>
 
     <div class="column">
@@ -58,7 +67,7 @@
 
         function addLinks(links, targetElementId) {
             const ul = document.getElementById(targetElementId);
-            if (ul) { // Check if the element exists before trying to add links
+            if (ul) {
                 links.forEach(link => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
@@ -68,37 +77,45 @@
                     ul.appendChild(li);
                 });
             } else {
-              console.error("Target element not found:", targetElementId);
+                console.error("Target element not found:", targetElementId);
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             loadMarkdown('introduction-to-chemistry.md', 'intro-content');
 
-            const apChemistryLinks = [
-                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
-                { file: 'compound-structure.md', text: 'Compound Structure and Properties' },
-                { file: 'substance-properties.md', text: 'Properties of Substances and Mixtures' },
+            const academicChemistryLinks = [
+                { file: 'matter-properties.md', text: 'Matter and Its Properties' },
+                { file: 'atomic-structure.md', text: 'Atomic Structure' },
+                { file: 'periodic-table.md', text: 'Periodic Table' },
+                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
                 { file: 'chemical-reactions.md', text: 'Chemical Reactions' },
-                { file: 'kinetics.md', text: 'Kinetics' },
-                { file: 'thermochemistry.md', text: 'Thermochemistry' },
-                { file: 'equilibrium.md', text: 'Equilibrium' },
+                { file: 'states-of-matter.md', text: 'States of Matter' },
                 { file: 'acids-bases.md', text: 'Acids and Bases' },
-                { file: 'thermodynamics-electrochemistry.md', text: 'Thermodynamics and Electrochemistry' }
+                { file: 'laboratory-skills.md', text: 'Laboratory Skills' }
             ];
 
-            const generalChemistryLinks = [
-                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
-                { file: 'stoichiometry.md', text: 'Stoichiometry' },
-                { file: 'states-of-matter.md', text: 'State of Matter' },
-                { file: 'solutions.md', text: 'Solutions' },
-                { file: 'gas-laws.md', text: 'Gas Laws' },
-                { file: 'redox-reactions.md', text: 'Redox Reactions' }
+            const advancedChemistryLinks = [
+                { file: 'thermochemistry.md', text: 'Thermochemistry' },
+                { file: 'kinetics.md', text: 'Kinetics' },
+                { file: 'equilibrium.md', text: 'Equilibrium' },
+                { file: 'electrochemistry.md', text: 'Electrochemistry' },
+                { file: 'organic-chemistry.md', text: 'Organic Chemistry' },
+                { file: 'advanced-lab-techniques.md', text: 'Advanced Laboratory Techniques' }
+            ];
+
+            const honorsChemistryLinks = [
+                { file: 'in-depth-analysis.md', text: 'In-Depth Chemical Analysis' },
+                { file: 'quantitative-analysis.md', text: 'Quantitative Analysis' },
+                { file: 'research-projects.md', text: 'Research Projects' },
+                { file: 'advanced-instrumentation.md', text: 'Advanced Instrumentation' },
+                { file: 'college-prep.md', text: 'Preparation for College-Level Chemistry' }
             ];
 
             setTimeout(() => {
-                addLinks(generalChemistryLinks, 'general-chemistry-links');
-                addLinks(apChemistryLinks, 'ap-chemistry-links');
+                addLinks(academicChemistryLinks, 'academic-chemistry-links');
+                addLinks(advancedChemistryLinks, 'advanced-chemistry-links');
+                addLinks(honorsChemistryLinks, 'honors-chemistry-links');
             }, 0);
         });
     </script>

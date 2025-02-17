@@ -14,6 +14,18 @@
             width: 50%;
             padding: 20px;
         }
+        .visual-box {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .general { background-color: #d4e157; }
+        .ap { background-color: #42a5f5; }
+        .academic { background-color: #ffca28; }
+        .advanced { background-color: #ef5350; }
+        .honors { background-color: #ab47bc; }
+        
         ul {
             list-style: none;
             padding: 0;
@@ -21,47 +33,49 @@
         li {
             margin-bottom: 5px;
         }
+        a {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-
     <div class="column">
-        <h2>📗 General Chemistry</h2>
+        <div class="visual-box general">📗 General Chemistry</div>
         <ul id="general-chemistry-links"></ul>
 
-        <h2>📘 AP Chemistry</h2>
+        <div class="visual-box ap">📘 AP Chemistry</div>
         <ul id="ap-chemistry-links"></ul>
 
-        <h2>📙 Academic Chemistry</h2>
+        <div class="visual-box academic">📙 Academic Chemistry</div>
         <ul id="academic-chemistry-links"></ul>
 
-        <h2>📕 Advanced Chemistry</h2>
+        <div class="visual-box advanced">📕 Advanced Chemistry</div>
         <ul id="advanced-chemistry-links"></ul>
 
-        <h2>📔 Advanced Honors Concentrate Chemistry</h2>
+        <div class="visual-box honors">📔 Advanced Honors Chemistry</div>
         <ul id="honors-chemistry-links"></ul>
     </div>
 
     <div class="column">
-        <h2>Introduction to Chemistry</h2>
-        <div id="intro-content">Loading...</div>
+        <h2 id="content-title">Introduction to Chemistry</h2>
+        <div id="content-box">Loading...</div>
     </div>
 
     <script>
-        async function loadMarkdown(file, targetElementId) {
+        async function loadMarkdown(file, title) {
             try {
                 const rawURL = `https://raw.githubusercontent.com/gvbsvv/TheChemistryHub/main/${file}`;
                 const response = await fetch(rawURL);
-                if (!response.ok) {
-                    throw new Error(`Error loading ${file}: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`Error loading ${file}: ${response.status}`);
                 const text = await response.text();
                 const converter = new showdown.Converter();
-                const htmlContent = converter.makeHtml(text);
-                document.getElementById(targetElementId).innerHTML = htmlContent;
+                document.getElementById("content-title").innerText = title;
+                document.getElementById("content-box").innerHTML = converter.makeHtml(text);
             } catch (error) {
                 console.error(error);
-                document.getElementById(targetElementId).innerText = `Error loading ${file}.`;
+                document.getElementById("content-box").innerText = `Error loading ${file}.`;
             }
         }
 
@@ -71,8 +85,8 @@
                 links.forEach(link => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = `viewer.html?file=${link.file}`;
                     a.textContent = link.text;
+                    a.onclick = () => loadMarkdown(link.file, link.text);
                     li.appendChild(a);
                     ul.appendChild(li);
                 });
@@ -82,19 +96,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadMarkdown('introduction-to-chemistry.md', 'intro-content');
-
-            const apChemistryLinks = [
-                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
-                { file: 'compound-structure.md', text: 'Compound Structure and Properties' },
-                { file: 'substance-properties.md', text: 'Properties of Substances and Mixtures' },
-                { file: 'chemical-reactions.md', text: 'Chemical Reactions' },
-                { file: 'kinetics.md', text: 'Kinetics' },
-                { file: 'thermochemistry.md', text: 'Thermochemistry' },
-                { file: 'equilibrium.md', text: 'Equilibrium' },
-                { file: 'acids-bases.md', text: 'Acids and Bases' },
-                { file: 'thermodynamics-electrochemistry.md', text: 'Thermodynamics and Electrochemistry' }
-            ];
+            loadMarkdown('introduction-to-chemistry.md', 'Introduction to Chemistry');
 
             const generalChemistryLinks = [
                 { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
@@ -104,41 +106,30 @@
                 { file: 'gas-laws.md', text: 'Gas Laws' },
                 { file: 'redox-reactions.md', text: 'Redox Reactions' }
             ];
+            const apChemistryLinks = [
+                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
+                { file: 'compound-structure.md', text: 'Compound Structure and Properties' }
+            ];
             const academicChemistryLinks = [
                 { file: 'matter-properties.md', text: 'Matter and Its Properties' },
-                { file: 'atomic-structure.md', text: 'Atomic Structure' },
-                { file: 'periodic-table.md', text: 'Periodic Table' },
-                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
-                { file: 'chemical-reactions.md', text: 'Chemical Reactions' },
-                { file: 'states-of-matter.md', text: 'States of Matter' },
-                { file: 'acids-bases.md', text: 'Acids and Bases' },
-                { file: 'laboratory-skills.md', text: 'Laboratory Skills' }
+                { file: 'atomic-structure.md', text: 'Atomic Structure' }
             ];
-
             const advancedChemistryLinks = [
                 { file: 'thermochemistry.md', text: 'Thermochemistry' },
-                { file: 'kinetics.md', text: 'Kinetics' },
-                { file: 'equilibrium.md', text: 'Equilibrium' },
-                { file: 'electrochemistry.md', text: 'Electrochemistry' },
-                { file: 'organic-chemistry.md', text: 'Organic Chemistry' },
-                { file: 'advanced-lab-techniques.md', text: 'Advanced Laboratory Techniques' }
+                { file: 'kinetics.md', text: 'Kinetics' }
             ];
-
             const honorsChemistryLinks = [
                 { file: 'in-depth-analysis.md', text: 'In-Depth Chemical Analysis' },
-                { file: 'quantitative-analysis.md', text: 'Quantitative Analysis' },
-                { file: 'research-projects.md', text: 'Research Projects' },
-                { file: 'advanced-instrumentation.md', text: 'Advanced Instrumentation' },
-                { file: 'college-prep.md', text: 'Preparation for College-Level Chemistry' }
+                { file: 'quantitative-analysis.md', text: 'Quantitative Analysis' }
             ];
 
             setTimeout(() => {
-    addLinks(generalChemistryLinks, 'general-chemistry-links');
-    addLinks(apChemistryLinks, 'ap-chemistry-links');
-    addLinks(academicChemistryLinks, 'academic-chemistry-links');
-    addLinks(advancedChemistryLinks, 'advanced-chemistry-links');
-    addLinks(honorsChemistryLinks, 'honors-chemistry-links');
-}, 0);
+                addLinks(generalChemistryLinks, 'general-chemistry-links');
+                addLinks(apChemistryLinks, 'ap-chemistry-links');
+                addLinks(academicChemistryLinks, 'academic-chemistry-links');
+                addLinks(advancedChemistryLinks, 'advanced-chemistry-links');
+                addLinks(honorsChemistryLinks, 'honors-chemistry-links');
+            }, 0);
         });
     </script>
 </body>

@@ -23,9 +23,7 @@
         }
         .general { background-color: #d4e157; }
         .ap { background-color: #42a5f5; }
-        .academic { background-color: #ffca28; }
-        .advanced { background-color: #ef5350; }
-        .honors { background-color: #ab47bc; }
+        .advanced { background-color: #ffca28; }
         
         ul {
             list-style: none;
@@ -50,8 +48,8 @@
         <div class="visual-box ap" onclick="toggleSection('ap-chemistry-links')">📘 AP Chemistry</div>
         <ul id="ap-chemistry-links"></ul>
 
-        <div class="visual-box academic" onclick="toggleSection('academic-chemistry-links')">📙 Advanced Chemistry Topics</div>
-        <ul id="academic-chemistry-links"></ul>
+        <div class="visual-box advanced" onclick="toggleSection('advanced-chemistry-links')">🔬 Advanced Chemistry</div>
+        <ul id="advanced-chemistry-links"></ul>
     </div>
 
     <div class="column">
@@ -77,6 +75,7 @@
 
         function addLinks(links, targetElementId) {
             const ul = document.getElementById(targetElementId);
+            ul.innerHTML = "";
             if (ul) {
                 links.forEach(link => {
                     const li = document.createElement('li');
@@ -92,15 +91,23 @@
         }
 
         function toggleSection(sectionId) {
-            const sections = ['general-chemistry-links', 'ap-chemistry-links', 'academic-chemistry-links'];
+            const sections = ['general-chemistry-links', 'ap-chemistry-links', 'advanced-chemistry-links'];
             sections.forEach(id => {
-                document.getElementById(id).style.display = (id === sectionId && document.getElementById(id).style.display !== 'block') ? 'block' : 'none';
+                document.getElementById(id).style.display = (id === sectionId) ? 'block' : 'none';
             });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             loadMarkdown('introduction-to-chemistry.md', 'Introduction to Chemistry');
 
+            const generalChemistryLinks = [
+                { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
+                { file: 'stoichiometry.md', text: 'Stoichiometry' }
+            ];
+            const apChemistryLinks = [
+                { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
+                { file: 'compound-structure.md', text: 'Compound Structure and Properties' }
+            ];
             const advancedChemistryLinks = [
                 { file: 'nuclear-chemistry.md', text: 'Nuclear Chemistry' },
                 { file: 'polymer-chemistry.md', text: 'Polymer Chemistry' },
@@ -110,9 +117,9 @@
                 { file: 'agricultural-chemistry.md', text: 'Agricultural Chemistry' }
             ];
 
-            setTimeout(() => {
-                addLinks(advancedChemistryLinks, 'academic-chemistry-links');
-            }, 0);
+            addLinks(generalChemistryLinks, 'general-chemistry-links');
+            addLinks(apChemistryLinks, 'ap-chemistry-links');
+            addLinks(advancedChemistryLinks, 'advanced-chemistry-links');
         });
     </script>
 </body>

@@ -19,6 +19,7 @@
             margin-bottom: 10px;
             border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
         }
         .general { background-color: #d4e157; }
         .ap { background-color: #42a5f5; }
@@ -29,6 +30,7 @@
         ul {
             list-style: none;
             padding: 0;
+            display: none;
         }
         li {
             margin-bottom: 5px;
@@ -42,19 +44,19 @@
 </head>
 <body>
     <div class="column">
-        <div class="visual-box general">📗 General Chemistry</div>
+        <div class="visual-box general" onclick="toggleSection('general-chemistry-links')">📗 General Chemistry</div>
         <ul id="general-chemistry-links"></ul>
 
-        <div class="visual-box ap">📘 AP Chemistry</div>
+        <div class="visual-box ap" onclick="toggleSection('ap-chemistry-links')">📘 AP Chemistry</div>
         <ul id="ap-chemistry-links"></ul>
 
-        <div class="visual-box academic">📙 Academic Chemistry</div>
+        <div class="visual-box academic" onclick="toggleSection('academic-chemistry-links')">📙 Academic Chemistry</div>
         <ul id="academic-chemistry-links"></ul>
 
-        <div class="visual-box advanced">📕 Advanced Chemistry</div>
+        <div class="visual-box advanced" onclick="toggleSection('advanced-chemistry-links')">📕 Advanced Chemistry</div>
         <ul id="advanced-chemistry-links"></ul>
 
-        <div class="visual-box honors">📔 Advanced Honors Chemistry</div>
+        <div class="visual-box honors" onclick="toggleSection('honors-chemistry-links')">📔 Advanced Honors Chemistry</div>
         <ul id="honors-chemistry-links"></ul>
     </div>
 
@@ -95,16 +97,19 @@
             }
         }
 
+        function toggleSection(sectionId) {
+            const sections = ['general-chemistry-links', 'ap-chemistry-links', 'academic-chemistry-links', 'advanced-chemistry-links', 'honors-chemistry-links'];
+            sections.forEach(id => {
+                document.getElementById(id).style.display = (id === sectionId && document.getElementById(id).style.display !== 'block') ? 'block' : 'none';
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             loadMarkdown('introduction-to-chemistry.md', 'Introduction to Chemistry');
 
             const generalChemistryLinks = [
                 { file: 'chemical-bonding.md', text: 'Chemical Bonding' },
-                { file: 'stoichiometry.md', text: 'Stoichiometry' },
-                { file: 'states-of-matter.md', text: 'State of Matter' },
-                { file: 'solutions.md', text: 'Solutions' },
-                { file: 'gas-laws.md', text: 'Gas Laws' },
-                { file: 'redox-reactions.md', text: 'Redox Reactions' }
+                { file: 'stoichiometry.md', text: 'Stoichiometry' }
             ];
             const apChemistryLinks = [
                 { file: 'atomic-structure.md', text: 'Atomic Structure and Properties' },
